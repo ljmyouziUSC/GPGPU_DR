@@ -41,3 +41,17 @@ bk_3_data, bk_3_vld, bk_3_ocid, bk_3_bz,
 clk,rst, // inputs
 RDY, bypass_pyld, oc_0_data, oc_1_data   //outputs
 );
+
+module  RF_Controler
+(
+    input wire ReqFIFO_2op_EN，
+    input wire [2:0] rowid_a, rowid_b,
+    input wire [1:0] ocid,
+    input wire CDB_RF_RegWrite,
+    input wire CDB_RF_WriteAddr,
+
+    output reg [2:0] RF_Addr,
+    output reg [1:0] ocid_out,
+    output wire RF_WR,
+    output wire bank_valid
+);
