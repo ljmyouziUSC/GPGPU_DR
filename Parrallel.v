@@ -2,7 +2,7 @@ module Parallel_control
 (
     input wire [31:0] IU_OC_Instr,
     input wire oc_0_empty, oc_1_empty, oc_2_empty, oc_3_empty,
-    input wire [2:0] IU_OC_IU_OC_HWWarp,
+    input wire [2:0] IU_OC_HWWarp,
     input wire clk, rst,
 
     output reg [2:0] rowid_a, [1;0] bankid_a,
