@@ -8,7 +8,10 @@
 
 module  RF_Controler
 (
-    input wire ReqFIFO_2op_EN，
+    input wire rst,
+    input wire clk,
+
+    input wire ReqFIFO_2op_EN,
     input wire [2:0] rowid_a, rowid_b,
     input wire [1:0] ocid,
     input wire CDB_RF_RegWrite,
@@ -43,25 +46,25 @@ begin
     end else begin
         if (depth != 3'b111) begin
             if (ReqFIFO_2op_EN == 1) begin
-                ReqFIFO[Wp_a] <= (ocid, rowid_a);
-                ReqFIFO[Wp_b] <= (ocid, rowid_b);
+                ReqFIFO[Wp_a] <= {ocid, rowid_a};
+                ReqFIFO[Wp_b] <= {ocid, rowid_b};
                 Wp_a <= Wp_a + 2;
                 Wp_b <= Wp_b + 2;
                 depth <= depth + 2;
             end else begin
-                ReqFIFO[Wp_a] <= (ocid, rowid_a);//分配到不同的bank
-                ReqFIFO[Wp_b] <= (ocid, rowid_b);
+                ReqFIFO[Wp_a] <= {ocid, rowid_a};//分配到不同的bank
+                ReqFIFO[Wp_b] <= {ocid, rowid_b};
                 Wp_a <= Wp_a + 1;
                 Wp_b <= Wp_b + 1;//覆盖住
                 depth <= depth + 1;
             end
         end
         if (depth != 0) begin
-            if (RF_WR = 0) begin
+            if (RF_WR == 0) begin
                 //one more stall
                 Rp <= Rp + 1;
                 RF_Addr = ReqFIFO[Rp][2:0];
-                ocid_out = ReqFIFO[4:3];
+                ocid_out = ReqFIFO[Rp][4:3];
                 depth <= depth - 1;
             end else begin
                 RF_Addr = CDB_RF_WriteAddr;
@@ -70,5 +73,7 @@ begin
     end
 end
 assign bank_valid = (depth != 0);
+
+endmodule
 
 //check special registers
