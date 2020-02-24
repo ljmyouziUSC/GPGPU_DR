@@ -24,7 +24,6 @@ module Parallel_control
            reg [2:0] rowid_b, [1:0] bankid_b,
            reg [1:0] IU_OC_ocid,
     output wire ReqFIFO_2op_EN
-
 );
 
 module OC_collector_unit 

@@ -7,3 +7,6 @@ OC -- contains 4 collection units
   
 special regs not implememted  
 all the sensitive lists  
+Task Manager Allocating Singnal  
+Always carry 32b instr  
+Directly take source ID / destination ID have valid bits
