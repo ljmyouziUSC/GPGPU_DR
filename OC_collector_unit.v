@@ -28,8 +28,10 @@ input [4:0] c_0_reg_id_in, c_1_reg_id_in;
 input [1:0] WE;
 input RE, clk, rst;
 input [10:0] bypass_pyld_in;
-output RDY, valid, bypass_pyld;
-output oc_0_data, oc_1_data;
+output RDY, valid;
+output [10:0] bypass_pyld;
+output [31:0] oc_0_data;
+output [31:0] oc_1_data;
 /*---------wire/reg-------*/
 wire RDY;
 reg valid;
@@ -46,6 +48,9 @@ reg [31:0] oc_1_data;
 
 reg [31:0] oc_0_data_in;
 reg [31:0] oc_1_data_in;
+
+wire OC_0_WE;
+wire OC_1_WE;
 
 assign RDY = valid && ~(oc_0_valid && ~oc_0_rdy) && ~(oc_1_valid && ~oc_1_rdy);
 

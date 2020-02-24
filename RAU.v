@@ -27,7 +27,7 @@ module RAU
     input SWWarp_TM_RAU,
 
     output reg [4:0] Available_RAU_TM,
-    output reg Req_Done//end or start stall
+    output reg Req_Done_RAU_IB//end or start stall
 );
 
 reg [2:0] state;
@@ -68,7 +68,7 @@ begin
 end
 
 //conditions
-always @ (state or AlloEN_TM_RAU or ExitEN_IB_RAU or Req_Done)    
+always @ (state or AlloEN_TM_RAU or ExitEN_IB_RAU or Req_Done_RAU_IB)    
 begin
     case(state)
         READY: begin 
@@ -81,7 +81,7 @@ begin
             end
         end
         ALLO:begin
-            if (Req_Done == 1'b1) begin //defined in next always block
+            if (Req_Done_RAU_IB == 1'b1) begin //defined in next always block
                 next_state = READY;
             end else begin
                 next_state = ALLO;
@@ -104,7 +104,7 @@ begin
         LUT_RF_Row <= 0;
         MTptr <= 0;
         Available_RAU_TM <= 0;
-        Req_Done <= 0;
+        Req_Done_RAU_IB <= 0;
     end else begin
 
 
@@ -131,10 +131,10 @@ begin
                     LUT[LUT_StartAddr] <= {1'b1, LUT_RF_Row, LUT_RF_Bank};
                     LUT_StartAddr <= LUT_StartAddr + 1;
                     Available_RAU_TM <= Available_RAU_TM - 2;
-                    Req_Done = 1'b0;
+                    Req_Done_RAU_IB = 1'b0;
                 end
             end else begin
-                Req_Done = 1'b1;
+                Req_Done_RAU_IB = 1'b1;
             end
         end
 
