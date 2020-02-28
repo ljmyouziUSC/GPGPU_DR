@@ -1,10 +1,13 @@
 module RFOC(
+    input wire rst,
+    input wire clk,
+    
     input wire Valid_IB_OC,
     input wire [31:0] Instr_IB_OC,
     input wire [4:0] Src1_IB_OC,// MSB 是 取R16 下一位是specialreg
     input wire Src1_Valid_IB_OC,
     input wire [4:0] Src2_IB_OC,
-    input wire Src1_Valid_IB_OC,
+    input wire Src2_Valid_IB_OC,
     input wire [15:0] Imme_IB_OC,
     input wire Imme_Valid_IB_OC,
     input wire [3:0] ALUop_IB_OC,
@@ -18,8 +21,8 @@ module RFOC(
 
     //Allo or exit
     //Exit
-    input wire [2:0] ExitWarpID_IB_RAU,
-    input wire ExitEN_IB_RAU,
+    input wire [2:0] Exit_WarpID_IB_RAU_TM,
+    input wire Exit_IB_RAU_TM,
 
     //Allo
     input wire [2:0] HWWarp_TM_RAU,
@@ -28,10 +31,10 @@ module RFOC(
     input wire [7:0] SWWarp_TM_RAU,
 
     //Read 
-    input wire [2:0] HWWarp_IB_RAU, //with valid?
+    input wire [2:0] HWWarp_IB_OC, //with valid?
 
     //Write
-    input wire RegWrite_CDB_ReqFIFO,
+    input wire RegWrite_CDB_OC,
     input wire [2:0] WriteAddr_CDB_OC,
     input wire [2:0] HWWarp_CDB_OC,
     input wire [255:0] Data_CDB_OC,

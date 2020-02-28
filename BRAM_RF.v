@@ -23,7 +23,7 @@
 // A parameterized, inferable, true dual-port, dual-clock block RAM in Verilog.
  
 module Inferable_BRAM #(
-    parameter OREG = 0,
+    parameter OREG = 0, //要不要？？？
     parameter DATA = 256,    // 32 * 8 bits for each warp with 8 threads
     parameter ADDR = 3      // 8 loc each bank
 ) (
