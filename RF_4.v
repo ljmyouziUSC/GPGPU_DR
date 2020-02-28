@@ -4,10 +4,10 @@ module RegisterFile(
     input wire [2:0] RF_Addr_2,
     input wire [2:0] RF_Addr_3,
 
-    input wire [3:0] ocid_out_0,
-    input wire [3:0] ocid_out_1,
-    input wire [3:0] ocid_out_2,
-    input wire [3:0] ocid_out_3,
+    input wire [2:0] ocid_out_0,
+    input wire [2:0] ocid_out_1,
+    input wire [2:0] ocid_out_2,
+    input wire [2:0] ocid_out_3,
 
     input wire RF_WR_0,
     input wire RF_WR_1,
@@ -24,20 +24,19 @@ module RegisterFile(
     output wire [255:0] DataOut_2,
     output wire [255:0] DataOut_3,
     
-    output wire [3:0] ocid_0,
-    output wire [3:0] ocid_1,
-    output wire [3:0] ocid_2,
-    output wire [3:0] ocid_3
+    output wire [2:0] ocid_0,
+    output wire [2:0] ocid_1,
+    output wire [2:0] ocid_2,
+    output wire [2:0] ocid_3
 );
 
 
 
-assign ocid_0 = ocid_out_0;
-assign ocid_1 = ocid_out_1;
-assign ocid_2 = ocid_out_2;
-assign ocid_3 = ocid_out_3;
 
 Inferable_BRAM RF_0(
+    //
+    .OCID(ocid_out_0),
+    .OCDst(ocid_0),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_0),
@@ -54,6 +53,9 @@ Inferable_BRAM RF_0(
 );
 
 Inferable_BRAM RF_1(
+    //
+    .OCID(ocid_out_1),
+    .OCDst(ocid_1),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_1),
@@ -70,6 +72,9 @@ Inferable_BRAM RF_1(
 );
 
 Inferable_BRAM RF_2(
+    //
+    .OCID(ocid_out_2),
+    .OCDst(ocid_2),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_2),
@@ -86,6 +91,9 @@ Inferable_BRAM RF_2(
 );
 
 Inferable_BRAM RF_3(
+    //
+    .OCID(ocid_out_3),
+    .OCDst(ocid_3),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_3),

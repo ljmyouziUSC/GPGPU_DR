@@ -18,7 +18,8 @@ module ReqFIFO_4(
     input [2:0] Src2_Phy_Row_ID,
     input ReqFIFO_2op_EN,
     
-    input [3:0] OCID_RAU_OC,
+    input [2:0] Src1_OCID_RAU_OC,
+    input [2:0] Src2_OCID_RAU_OC,
 
     input [255:0] Data_CDB,
 
@@ -59,10 +60,15 @@ wire [2:0] Src2_Phy_Row_ID_1 = Src2_Phy_Row_ID;
 wire [2:0] Src2_Phy_Row_ID_2 = Src2_Phy_Row_ID;
 wire [2:0] Src2_Phy_Row_ID_3 = Src2_Phy_Row_ID;
 
-wire [3:0] OCID_RAU_OC_0 = OCID_RAU_OC;
-wire [3:0] OCID_RAU_OC_1 = OCID_RAU_OC;
-wire [3:0] OCID_RAU_OC_2 = OCID_RAU_OC;
-wire [3:0] OCID_RAU_OC_3 = OCID_RAU_OC;
+wire [2:0] Src1_OCID_RAU_OC_0 = Src2_OCID_RAU_OC;
+wire [2:0] Src1_OCID_RAU_OC_1 = Src2_OCID_RAU_OC;
+wire [2:0] Src1_OCID_RAU_OC_2 = Src2_OCID_RAU_OC;
+wire [2:0] Src1_OCID_RAU_OC_3 = Src2_OCID_RAU_OC;
+
+wire [2:0] Src2_OCID_RAU_OC_0 = Src2_OCID_RAU_OC;
+wire [2:0] Src2_OCID_RAU_OC_1 = Src2_OCID_RAU_OC;
+wire [2:0] Src2_OCID_RAU_OC_2 = Src2_OCID_RAU_OC;
+wire [2:0] Src2_OCID_RAU_OC_3 = Src2_OCID_RAU_OC;
 
 wire RF_Read_Valid_0 = ((Src1_Phy_Bank_ID ==  4'b0001)&(Src1_Valid)) | ((Src2_Phy_Bank_ID == 4'b0001) & (Src2_Valid));
 wire RF_Read_Valid_1 = ((Src1_Phy_Bank_ID ==  4'b0010)&(Src1_Valid)) | ((Src2_Phy_Bank_ID == 4'b0010) & (Src2_Valid));
@@ -82,7 +88,8 @@ ReqFIFO Req0(
     .ReqFIFO_2op_EN(ReqFIFO_2op_EN_0),
     .Src1_Phy_Row_ID(Src1_Phy_Row_ID_0), 
     .Src2_Phy_Row_ID(Src2_Phy_Row_ID_0),
-    .OCID_RAU_OC(OCID_RAU_OC_0),
+    .Src1_OCID_RAU_OC(Src1_OCID_RAU_OC_0),
+    .Src2_OCID_RAU_OC(Src2_OCID_RAU_OC_0),
     .RF_Read_Valid(RF_Read_Valid_0),
     .RF_Write_Valid(RF_Write_Valid_0),
     .WriteRow(WriteRow),
@@ -102,7 +109,8 @@ ReqFIFO Req1(
     .ReqFIFO_2op_EN(ReqFIFO_2op_EN_1),
     .Src1_Phy_Row_ID(Src1_Phy_Row_ID_1), 
     .Src2_Phy_Row_ID(Src2_Phy_Row_ID_1),
-    .OCID_RAU_OC(OCID_RAU_OC_1),
+    .Src1_OCID_RAU_OC(Src1_OCID_RAU_OC_1),
+    .Src2_OCID_RAU_OC(Src2_OCID_RAU_OC_1),
     .RF_Read_Valid(RF_Read_Valid_1),
     .RF_Write_Valid(RF_Write_Valid_1),
     .WriteRow(WriteRow),
@@ -122,7 +130,8 @@ ReqFIFO Req2(
     .ReqFIFO_2op_EN(ReqFIFO_2op_EN_2),
     .Src1_Phy_Row_ID(Src1_Phy_Row_ID_2), 
     .Src2_Phy_Row_ID(Src2_Phy_Row_ID_2),
-    .OCID_RAU_OC(OCID_RAU_OC_2),
+    .Src1_OCID_RAU_OC(Src1_OCID_RAU_OC_2),
+    .Src2_OCID_RAU_OC(Src2_OCID_RAU_OC_2),
     .RF_Read_Valid(RF_Read_Valid_2),
     .RF_Write_Valid(RF_Write_Valid_2),
     .WriteRow(WriteRow),
@@ -142,7 +151,8 @@ ReqFIFO Req3(
     .ReqFIFO_2op_EN(ReqFIFO_2op_EN_3),
     .Src1_Phy_Row_ID(Src1_Phy_Row_ID_3), 
     .Src2_Phy_Row_ID(Src2_Phy_Row_ID_3),
-    .OCID_RAU_OC(OCID_RAU_OC_3),
+    .Src1_OCID_RAU_OC(Src1_OCID_RAU_OC_3),
+    .Src2_OCID_RAU_OC(Src2_OCID_RAU_OC_3),
     .RF_Read_Valid(RF_Read_Valid_3),
     .RF_Write_Valid(RF_Write_Valid_3),
     .WriteRow(WriteRow),

@@ -55,7 +55,9 @@ module Mapping(
     input wire oc_3_empty,
 
     //OCID
-    output reg [3:0] OCID_RAU_OC,
+    output reg [1:0] OCID_RAU_OC,
+    output wire [2:0] Src1_OCID_RAU_OC,
+    output wire [2:0] Src2_OCID_RAU_OC,
 
     //read write output
     output wire Src1_Valid,
@@ -265,14 +267,18 @@ assign ReqFIFO_2op_EN = (Src1_Phy_Bank_ID == Src2_Phy_Bank_ID) & (Src1_Valid_IB_
 always @ (*)
 begin
     if (oc_0_empty == 1)
-        OCID_RAU_OC = 4'b0001;
+        OCID_RAU_OC = 2'b00;
     else if (oc_1_empty == 1)
-        OCID_RAU_OC = 4'b0010;
+        OCID_RAU_OC = 2'b01;
     else if (oc_2_empty == 1)
-        OCID_RAU_OC = 4'b0100;
+        OCID_RAU_OC = 2'b10;
     else if (oc_3_empty == 1)
-        OCID_RAU_OC = 4'b1000;
+        OCID_RAU_OC = 2'b11;
 end
+
+
+assign Src1_OCID_RAU_OC = {OCID_RAU_OC , 1'b0};
+assign Src2_OCID_RAU_OC = {OCID_RAU_OC , 1'b1};
 
 //occupied to OC
 

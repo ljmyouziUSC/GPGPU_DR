@@ -13,7 +13,8 @@ module  ReqFIFO
 
     input wire ReqFIFO_2op_EN,
     input wire [2:0] Src1_Phy_Row_ID, Src2_Phy_Row_ID,
-    input wire [3:0] OCID_RAU_OC,
+    input wire [2:0] Src1_OCID_RAU_OC,
+    input wire [2:0] Src2_OCID_RAU_OC,
     input wire RF_Read_Valid,
     input wire RF_Write_Valid,
     input wire [2:0] WriteRow,
@@ -29,7 +30,7 @@ module  ReqFIFO
 
 
 //定义fifo
-reg [6:0] ReqFIFO [8:0];//TODO: Depth
+reg [5:0] ReqFIFO [7:0];//TODO: Depth
 reg [4:0] Rp, Wp, Wp_p1;//2 read req
 wire [3:0] depth = Wp - Rp;
 wire Full = (depth == 4'b1000);
@@ -51,12 +52,12 @@ begin
     if (RF_Read_Valid == 1) begin
         if (depth <= 6) begin   
                 if ((depth < 7) & (ReqFIFO_2op_EN == 1)) begin
-                    ReqFIFO[Wp] <= {OCID_RAU_OC, Src1_Phy_Row_ID};
-                    ReqFIFO[Wp_p1] <= {OCID_RAU_OC, Src2_Phy_Row_ID};
+                    ReqFIFO[Wp] <= {Src1_OCID_RAU_OC, Src1_Phy_Row_ID};
+                    ReqFIFO[Wp_p1] <= {Src2_OCID_RAU_OC, Src2_Phy_Row_ID};
                     Wp <= Wp + 2;
                     Wp_p1 <= Wp_p1 + 2;
                 end else if ((Full==0) & (ReqFIFO_2op_EN == 0)) begin
-                    ReqFIFO[Wp] <= {OCID_RAU_OC, Src1_Phy_Row_ID};//分配到不同的bank
+                    ReqFIFO[Wp] <= {Src1_OCID_RAU_OC, Src1_Phy_Row_ID};//分配到不同的bank
                     Wp <= Wp + 1;
                     Wp_p1 <= Wp_p1 + 1;
                 end
