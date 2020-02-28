@@ -27,9 +27,6 @@ module Inferable_BRAM #(
     parameter DATA = 256,    // 32 * 8 bits for each warp with 8 threads
     parameter ADDR = 3      // 8 loc each bank
 ) (
-
-    input wire [2:0] OCID,
-    output reg [2:0] OCDst,
         // Port A
     input   wire                a_clk,
     input   wire                a_wr,
@@ -97,10 +94,6 @@ end else begin // flow-through BRAM
         end
     end
 
-    //OCID
-    always @(posedge a_clk) begin
-        OCDst <= OCID;
-    end
 end
 endgenerate
  

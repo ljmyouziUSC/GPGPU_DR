@@ -12,6 +12,8 @@ module  ReqFIFO
     input wire clk,
 
     input wire ReqFIFO_2op_EN,
+    input wire Scr1_Valid,
+    input wire Src2_Valid,
     input wire [2:0] Src1_Phy_Row_ID, Src2_Phy_Row_ID,
     input wire [2:0] Src1_OCID_RAU_OC,
     input wire [2:0] Src2_OCID_RAU_OC,
@@ -57,9 +59,15 @@ begin
                     Wp <= Wp + 2;
                     Wp_p1 <= Wp_p1 + 2;
                 end else if ((Full==0) & (ReqFIFO_2op_EN == 0)) begin
-                    ReqFIFO[Wp] <= {Src1_OCID_RAU_OC, Src1_Phy_Row_ID};//分配到不同的bank
-                    Wp <= Wp + 1;
-                    Wp_p1 <= Wp_p1 + 1;
+                    if (Scr1_Valid) begin
+                        ReqFIFO[Wp] <= {Src1_OCID_RAU_OC, Src1_Phy_Row_ID};//分配到不同的bank
+                        Wp <= Wp + 1;
+                        Wp_p1 <= Wp_p1 + 1;
+                    end else if (Src2_Valid) begin
+                        ReqFIFO[Wp] <= {Src2_OCID_RAU_OC, Src2_Phy_Row_ID};//分配到不同的bank
+                        Wp <= Wp + 1;
+                        Wp_p1 <= Wp_p1 + 1;
+                    end
                 end
             end
         if (depth == 0) begin

@@ -22,21 +22,26 @@ module RegisterFile(
     output wire [255:0] DataOut_0,
     output wire [255:0] DataOut_1,
     output wire [255:0] DataOut_2,
-    output wire [255:0] DataOut_3,
+    output wire [255:0] DataOut_3,//不能写wire？
+
     
-    output wire [2:0] ocid_0,
-    output wire [2:0] ocid_1,
-    output wire [2:0] ocid_2,
-    output wire [2:0] ocid_3
+    output reg [2:0] ocid_0,
+    output reg [2:0] ocid_1,
+    output reg [2:0] ocid_2,
+    output reg [2:0] ocid_3
 );
 
 
-
+always @ (posedge clk)
+begin
+    ocid_0 <= ocid_out_0;
+    ocid_1 <= ocid_out_1;
+    ocid_2 <= ocid_out_2;
+    ocid_3 <= ocid_out_3;
+end
 
 Inferable_BRAM RF_0(
-    //
-    .OCID(ocid_out_0),
-    .OCDst(ocid_0),
+
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_0),
@@ -53,9 +58,6 @@ Inferable_BRAM RF_0(
 );
 
 Inferable_BRAM RF_1(
-    //
-    .OCID(ocid_out_1),
-    .OCDst(ocid_1),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_1),
@@ -72,9 +74,6 @@ Inferable_BRAM RF_1(
 );
 
 Inferable_BRAM RF_2(
-    //
-    .OCID(ocid_out_2),
-    .OCDst(ocid_2),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_2),
@@ -91,9 +90,6 @@ Inferable_BRAM RF_2(
 );
 
 Inferable_BRAM RF_3(
-    //
-    .OCID(ocid_out_3),
-    .OCDst(ocid_3),
     // Port A
     .a_clk(clk),
     .a_wr(RF_WR_3),
