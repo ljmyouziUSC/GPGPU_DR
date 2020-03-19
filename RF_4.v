@@ -1,13 +1,17 @@
 module RegisterFile(
+    input wire clk,
+    input wire rst,
+
+    input wire [7:0] RF_WR_MASK,
     input wire [2:0] RF_Addr_0,
     input wire [2:0] RF_Addr_1,
     input wire [2:0] RF_Addr_2,
     input wire [2:0] RF_Addr_3,
 
-    input wire [2:0] ocid_out_0,
-    input wire [2:0] ocid_out_1,
-    input wire [2:0] ocid_out_2,
-    input wire [2:0] ocid_out_3,
+    input wire [3:0] ocid_out_0,
+    input wire [3:0] ocid_out_1,
+    input wire [3:0] ocid_out_2,
+    input wire [3:0] ocid_out_3,
 
     input wire RF_WR_0,
     input wire RF_WR_1,
@@ -25,11 +29,17 @@ module RegisterFile(
     output wire [255:0] DataOut_3,//不能写wire？
 
     
-    output reg [2:0] ocid_0,
-    output reg [2:0] ocid_1,
-    output reg [2:0] ocid_2,
-    output reg [2:0] ocid_3
+    output reg [3:0] ocid_0,
+    output reg [3:0] ocid_1,
+    output reg [3:0] ocid_2,
+    output reg [3:0] ocid_3
 );
+
+wire [7:0] RF_WR_MASK_0 = RF_WR_0 ? RF_WR_MASK : 8'b00000000;
+wire [7:0] RF_WR_MASK_1 = RF_WR_1 ? RF_WR_MASK : 8'b00000000;
+wire [7:0] RF_WR_MASK_2 = RF_WR_2 ? RF_WR_MASK : 8'b00000000;
+wire [7:0] RF_WR_MASK_3 = RF_WR_3 ? RF_WR_MASK : 8'b00000000;
+
 
 
 always @ (posedge clk)
@@ -40,68 +50,45 @@ begin
     ocid_3 <= ocid_out_3;
 end
 
-Inferable_BRAM RF_0(
+BRAM_MASK RF_0(
+    .clk(clk),
+    .rst(rst),
 
-    // Port A
-    .a_clk(clk),
-    .a_wr(RF_WR_0),
-    .a_addr(RF_Addr_0),
-    .a_din(WriteData_0),
-    .a_dout(DataOut_0),
-     
-    // Port B
-    .b_clk(clk),
-    .b_wr(RF_WR_0),
-    .b_addr(RF_Addr_0),
-    .b_din(WriteData_0),
-    .b_dout()
+    .RF_WR_MASK(RF_WR_MASK_0),
+    .RF_Addr(RF_Addr_0),
+    .WriteData(WriteData_0),
+
+    .DataOut(DataOut_0)
 );
 
-Inferable_BRAM RF_1(
-    // Port A
-    .a_clk(clk),
-    .a_wr(RF_WR_1),
-    .a_addr(RF_Addr_1),
-    .a_din(WriteData_1),
-    .a_dout(DataOut_1),
-     
-    // Port B
-    .b_clk(clk),
-    .b_wr(RF_WR_1),
-    .b_addr(RF_Addr_1),
-    .b_din(WriteData_1),
-    .b_dout()
-);
+BRAM_MASK RF_1(
+    .clk(clk),
+    .rst(rst),
 
-Inferable_BRAM RF_2(
-    // Port A
-    .a_clk(clk),
-    .a_wr(RF_WR_2),
-    .a_addr(RF_Addr_2),
-    .a_din(WriteData_2),
-    .a_dout(DataOut_2),
-     
-    // Port B
-    .b_clk(clk),
-    .b_wr(RF_WR_2),
-    .b_addr(RF_Addr_2),
-    .b_din(WriteData_2),
-    .b_dout()
-);
+    .RF_WR_MASK(RF_WR_MASK_1),
+    .RF_Addr(RF_Addr_1),
+    .WriteData(WriteData_1),
 
-Inferable_BRAM RF_3(
-    // Port A
-    .a_clk(clk),
-    .a_wr(RF_WR_3),
-    .a_addr(RF_Addr_3),
-    .a_din(WriteData_3),
-    .a_dout(DataOut_3),
-     
-    // Port B
-    .b_clk(clk),
-    .b_wr(RF_WR_3),
-    .b_addr(RF_Addr_3),
-    .b_din(WriteData_3),
-    .b_dout()
+    .DataOut(DataOut_1)
+);
+BRAM_MASK RF_2(
+    .clk(clk),
+    .rst(rst),
+
+    .RF_WR_MASK(RF_WR_MASK_2),
+    .RF_Addr(RF_Addr_2),
+    .WriteData(WriteData_2),
+
+    .DataOut(DataOut_2)
+);
+BRAM_MASK RF_3(
+    .clk(clk),
+    .rst(rst),
+
+    .RF_WR_MASK(RF_WR_MASK_3),
+    .RF_Addr(RF_Addr_3),
+    .WriteData(WriteData_3),
+
+    .DataOut(DataOut_3)
 );
 endmodule

@@ -12,6 +12,7 @@ module Mapping(
     input wire [4:0] Src2_IB_RAU,//use; MSB->SpecialReg
     input wire Src2_Valid_IB_RAU,//?????
     //
+    input wire RegWrite_IB_RAU,
     input wire [4:0] Dst_IB_OC,
     input wire [15:0] Imme_IB_RAU,//use
     input wire Imme_Valid_IB_RAU,//?????
@@ -35,7 +36,7 @@ module Mapping(
     input wire [2:0] Nreq_TM_RAU,
     input wire [7:0] SWWarp_TM_RAU,
 
-    output reg [4:0] Available_RAU_TM,
+    //output reg [4:0] Available_RAU_TM,
     output reg [8:0] AllocStall_RAU_IB,//IF?
 
     //Read 
@@ -74,19 +75,19 @@ module Mapping(
     output wire WriteValid,
 
     //every
-    output wire Valid_RAU_ReqFIFO,//use
-    output wire [31:0] Instr_RAU_ReqFIFO,//pass
+    output wire Valid_RAU_Collecting ,//use
+    output wire [31:0] Instr_RAU_Collecting ,//pass
 
-    output wire [15:0] Imme_RAU_ReqFIFO,//
-    output wire Imme_Valid_RAU_ReqFIFO,//
-    output wire [3:0] ALUop_RAU_ReqFIFO,//
-    output wire MemWrite_RAU_ReqFIFO,//
-    output wire MemRead_RAU_ReqFIFO,//
-    output wire Shared_Globalbar_RAU_ReqFIFO,//pass
-    output wire BEQ_RAU_ReqFIFO,//pass
-    output wire BLT_RAU_ReqFIFO,//pass
-    output wire [1:0] ScbID_RAU_ReqFIFO,//pass
-    output wire [7:0] ActiveMask_RAU_ReqFIFO,//pass
+    output wire [15:0] Imme_RAU_Collecting ,//
+    output wire Imme_Valid_RAU_Collecting ,//
+    output wire [3:0] ALUop_RAU_Collecting ,//
+    output wire MemWrite_RAU_Collecting ,//
+    output wire MemRead_RAU_Collecting ,//
+    output wire Shared_Globalbar_RAU_Collecting ,//pass
+    output wire BEQ_RAU_Collecting ,//pass
+    output wire BLT_RAU_Collecting ,//pass
+    output wire [1:0] ScbID_RAU_Collecting ,//pass
+    output wire [7:0] ActiveMask_RAU_Collecting ,//pass
 
     output wire [255:0]Data_CDB,
     output wire [31:0]Instr_CDB
@@ -170,7 +171,6 @@ begin
         LUT_RF_Bank = 0;
         LUT_RF_Row = 0;
         MTptr <= 0;
-        Available_RAU_TM <= 0;
         Req_Done_RAU_IB = 0;
     end else begin
 
@@ -200,13 +200,14 @@ begin
                     LUT_Addr <= LUT_Addr + 1;//for loop statement//不能用<=??associative？
                     Nreq <= Nreq - 2;
                     LUT[LUT_Addr] <= {1'b1, LUT_RF_Row, LUT_RF_Bank};
-                    Available_RAU_TM <= Available_RAU_TM - 2;
+                    //Available_RAU_TM <= Available_RAU_TM - 2;
                     Req_Done_RAU_IB = 1'b0;
                 end
                 else begin
                     Req_Done_RAU_IB = 1'b1;
                     AllocStall_RAU_IB = 0;
                 end
+                //for (integer i = 0; i<)
             end
         end
 
@@ -216,28 +217,28 @@ begin
             if (LUT[HWWarp * 4][4] == 1'b1) begin
                 MT[LUT[HWWarp * 4][3:1] * 2 + LUT[HWWarp * 4][0]] <= 1'b0;	//MT corresponding bit reset
                 LUT[HWWarp * 4][4] <= 1'b0; //LUT valid bit reset
-                Available_RAU_TM <= Available_RAU_TM + 2;
+                //Available_RAU_TM <= Available_RAU_TM + 2;
                 
             end
 
             if (LUT[HWWarp * 4 + 1][4] == 1'b1) begin
                 MT[LUT[HWWarp * 4 + 1][3:1] * 2 + LUT[HWWarp * 4 + 1][0]] <= 1'b0;
                 LUT[HWWarp * 4 + 1][4] <= 1'b0;
-                Available_RAU_TM <= Available_RAU_TM + 4;
+                //Available_RAU_TM <= Available_RAU_TM + 4;
                 
             end
 
             if (LUT[HWWarp * 4 + 2][4] == 1'b1) begin
                 MT[LUT[HWWarp * 4 + 2][3:1] * 2 + LUT[HWWarp * 4 + 2][0]] <= 1'b0;
                 LUT[HWWarp * 4 + 2][4] <= 1'b0;
-                Available_RAU_TM <= Available_RAU_TM + 6;
+                //Available_RAU_TM <= Available_RAU_TM + 6;
                 
             end
             
             if (LUT[HWWarp * 4 + 3][4] == 1'b1) begin
                 MT[LUT[HWWarp * 4 + 3][3:1] * 2 + LUT[HWWarp * 4 + 3][0]] <= 1'b0;			
                 LUT[HWWarp * 4 + 3][4] <= 1'b0;
-                Available_RAU_TM <= Available_RAU_TM + 8; // later one will mask the previous ones
+                //Available_RAU_TM <= Available_RAU_TM + 8; // later one will mask the previous ones
             end
         end
     endcase
@@ -283,19 +284,20 @@ assign Src2_OCID_RAU_OC = {OCID_RAU_OC , 1'b1};
 //occupied to OC
 
 
-assign Valid_RAU_ReqFIFO = Valid_IB_RAU;
-assign Instr_RAU_ReqFIFO = Instr_IB_RAU;
+assign Valid_RAU_Collecting = Valid_IB_RAU;
+assign Instr_RAU_Collecting = Instr_IB_RAU;
 
-assign Imme_RAU_ReqFIFO =Imme_IB_RAU;
-assign Imme_Valid_RAU_ReqFIFO = Imme_Valid_IB_RAU;
-assign ALUop_RAU_ReqFIFO = ALUop_IB_RAU;
-assign MemWrite_RAU_ReqFIFO = MemWrite_IB_RAU;
-assign MemRead_RAU_ReqFIFO = MemRead_IB_RAU;
-assign Shared_Globalbar_RAU_ReqFIFO = Shared_Globalbar_IB_RAU;
-assign BEQ_RAU_ReqFIFO = BEQ_IB_RAU;
-assign BLT_RAU_ReqFIFO = BLT_IB_RAU;
-assign ScbID_RAU_ReqFIFO = ScbID_IB_RAU;
-assign ActiveMask_RAU_ReqFIFO = ActiveMask_IB_RAU;
+assign Imme_RAU_Collecting =Imme_IB_RAU;
+assign Imme_Valid_RAU_Collecting = Imme_Valid_IB_RAU;
+assign ALUop_RAU_Collecting = ALUop_IB_RAU;
+assign MemWrite_RAU_Collecting = MemWrite_IB_RAU;
+assign MemRead_RAU_Collecting = MemRead_IB_RAU;
+assign Shared_Globalbar_RAU_Collecting = Shared_Globalbar_IB_RAU;
+assign BEQ_RAU_Collecting = BEQ_IB_RAU;
+assign BLT_RAU_Collecting = BLT_IB_RAU;
+assign ScbID_RAU_Collecting = ScbID_IB_RAU;
+assign ActiveMask_RAU_Collecting = ActiveMask_IB_RAU;
+assign RegWrite_RAU_Collecting = RegWrite_IB_RAU;
 
 
 assign Data_CDB = Data_CDB_RAU;

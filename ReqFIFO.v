@@ -70,7 +70,7 @@ begin
                     end
                 end
             end
-        if (depth == 0) begin
+        if (depth != 0) begin
             Rp <= Rp + 1;
         end
     end
@@ -80,7 +80,7 @@ end
 
 
 assign RF_Addr = RF_Write_Valid ? WriteRow: ReqFIFO[Rp][2:0];
-assign ocid_out = ReqFIFO[Rp][6:3];//写assign还是在里面
+assign ocid_out = {(depth!=0) ,ReqFIFO[Rp][5:3]};//写assign还是在里面
 assign RF_WR = RF_Write_Valid;
 
 assign WriteData = Data_CDB;
